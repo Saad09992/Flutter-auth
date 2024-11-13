@@ -14,7 +14,7 @@ export const signUp = async (req, res) => {
     if (userAlreadyExists) {
       return res
         .status(409)
-        .json({ msg: "User already exists", success: false });
+        .json({ msg: "User already exists", status: "error" });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -26,31 +26,29 @@ export const signUp = async (req, res) => {
     });
 
     await addUser.save();
-
-    res.status(201).json({ Status: "OK" });
+    res
+      .status(201)
+      .json({ msg: "User created successfully", status: "success" });
   } catch (error) {
-    console.log("error");
-    return res.status(400).json({ error: error.message, Status: "NO" });
+    return res.status(400).json({ error: error.message, status: "error" });
   }
 };
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
-  console.log(password);
 
   try {
     const checkUser = await User.findOne({ email });
 
     if (!checkUser) {
-      return res.status(400).json({ msg: "User not found", success: false });
+      return res.status(400).json({ msg: "User not found", status: "error" });
     }
 
     const isMatch = await bcrypt.compare(password, checkUser.password);
     if (!isMatch) {
       return res
         .status(400)
-        .json({ msg: "Invalid credentials", success: false });
+        .json({ msg: "Invalid credentials", status: "error" });
     }
     if (isMatch) {
       const tokenData = {
@@ -61,6 +59,8 @@ export const login = async (req, res) => {
       });
       await User.updateOne({ _id: checkUser._id }, { token: token });
       return res.status(201).json({
+        msg: "Login successful",
+        status: "success",
         token,
         userData: {
           username: checkUser.username,
@@ -69,7 +69,7 @@ export const login = async (req, res) => {
       });
     }
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ msg: error.message, status: "error" });
   }
 };
 
