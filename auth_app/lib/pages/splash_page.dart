@@ -14,7 +14,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  AuthController authController = Get.put(AuthController());
+  AuthController authController = Get.find();
 
   final SecureStorage secureStorage = SecureStorage();
 

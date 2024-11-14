@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:get/get.dart';
 import 'package:auth_app/network/network_api_service.dart';
 import 'package:auth_app/utils/secure_storage.dart';
@@ -8,7 +10,6 @@ import '../utils/urls.dart';
 class AuthController extends GetxController {
   RxBool _isLoading = false.obs;
   RxBool _isLoggedIn = false.obs;
-
   bool get isLoading => _isLoading.value;
   bool get isLoggedIn => _isLoggedIn.value;
 
