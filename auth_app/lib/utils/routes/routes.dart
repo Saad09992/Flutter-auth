@@ -1,3 +1,5 @@
+import 'package:auth_app/pages/home_page.dart';
+import 'package:auth_app/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import './routes_name.dart';
 import '../../pages/sign_up_page.dart';
@@ -14,6 +16,12 @@ class Routes {
       case RoutesName.signup:
         return MaterialPageRoute(
             builder: (BuildContext context) => const SignUpPage());
+      case RoutesName.home:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const HomePage());
+      case RoutesName.splash:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const SplashPage());
       // display this if route is invalid
       default:
         return MaterialPageRoute(builder: (_) {

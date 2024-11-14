@@ -1,6 +1,6 @@
 name: auth_app
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -10,8 +10,9 @@ dependencies:
   another_flushbar: ^1.12.30
   flutter:
     sdk: flutter
+  flutter_secure_storage: ^9.2.2
+  get: ^4.6.6
   http: ^1.2.2
-  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

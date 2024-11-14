@@ -1,37 +1,38 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, annotate_overrides
 
 class AppExceptions implements Exception {
-  final _message;
-  final _prefix;
+  final String? _message;
+  final String? _prefix;
   AppExceptions([this._message, this._prefix]);
 
+  @override
   String toString() {
     return '$_prefix$_message';
   }
 }
 
-// Error during fetching data
+// Exception for general communication errors, like no internet or server errors
 class FetchDataException extends AppExceptions {
-  FetchDataException([String? messege])
-      : super(messege, 'Error during communication');
+  FetchDataException([String? message])
+      : super(message, 'Error during communication: ');
 }
 
-// Error due to bad requests
-
-class BadReqException extends AppExceptions {
-  BadReqException([String? messege])
-      : super(messege, 'Invalid request communication');
+// Exception for invalid requests
+class BadRequestException extends AppExceptions {
+  BadRequestException([String? message]) : super(message, 'Invalid request: ');
 }
 
-// Error due to unAuth requests
-
-class UnAuthException extends AppExceptions {
-  UnAuthException([String? messege]) : super(messege, 'UnAuthorized request');
+// Exception for unauthorized requests
+class UnauthorizedException extends AppExceptions {
+  UnauthorizedException([String? message]) : super(message, 'Unauthorized: ');
 }
 
-// Error due to invalid input requests
-
+// Exception for input validation errors
 class InvalidInputException extends AppExceptions {
-  InvalidInputException([String? messege])
-      : super(messege, 'Invalid Input request');
+  InvalidInputException([String? message]) : super(message, 'Invalid input: ');
+}
+
+// New: Generic error to handle backend errors with 'status': 'error' responses
+class BackendErrorException extends AppExceptions {
+  BackendErrorException([String? message]) : super(message, 'Backend error: ');
 }

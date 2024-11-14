@@ -1,10 +1,11 @@
 // ignore_for_file: body_might_complete_normally_nullable, use_build_context_synchronously, avoid_types_as_parameter_names, non_constant_identifier_names
 
+import 'package:auth_app/components/drawer.dart';
 import 'package:auth_app/components/round_button.dart';
-import 'package:auth_app/provider/auth_provider.dart';
+import 'package:auth_app/controller/auth_controller.dart';
 import 'package:auth_app/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import '../utils/utils.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -14,6 +15,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  AuthController authController = Get.find();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -36,21 +39,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SignUP Page"),
+        title: const Text("SignUp Page"),
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Username',
@@ -64,9 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       context, usernameFocusNode, emailFocusNode);
                 },
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Email',
@@ -81,9 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       context, emailFocusNode, passwordFocusNode);
                 },
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               ValueListenableBuilder(
                   valueListenable: hidePassword,
                   builder: (context, value, child) {
@@ -106,12 +102,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       obscureText: hidePassword.value,
                     );
                   }),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               RoundButton(
                 title: "Signup",
-                loading: authProvider.isLoading,
+                loading: authController.isLoading,
                 onPress: () {
                   if (usernameController.text.isEmpty) {
                     Utils.errorMessage("Please enter your username", context);
@@ -128,16 +122,20 @@ class _SignUpPageState extends State<SignUpPage> {
                       'email': emailController.text,
                       'password': passwordController.text
                     };
-                    authProvider.signUpApi(data, context);
+                    authController.signUpApi(data, context).then((value) {
+                      Future.delayed(const Duration(seconds: 3), () {
+                        Navigator.pushReplacementNamed(
+                            context, RoutesName.login);
+                      });
+                    });
                   }
                 },
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, RoutesName.login).then((value) {
+                  Navigator.pushReplacementNamed(context, RoutesName.login)
+                      .then((value) {
                     Utils.successMessage(value.toString(), context);
                   }).onError((error, StackTrace) {
                     Utils.errorMessage(error.toString(), context);
